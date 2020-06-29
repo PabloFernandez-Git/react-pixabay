@@ -10,6 +10,14 @@ class App extends Component {
     imagenes: []
   }
 
+  paginaAnterior = () => {
+    console.log('Anterior...')
+  }
+
+  paginaSiguiente = () => {
+    console.log('Siguiente...')
+  }
+
   consultarApi = () => {
 
     const termino = this.state.termino;
@@ -42,9 +50,13 @@ class App extends Component {
           />
         </div>
         
-        <Resultado 
-          imagenes={this.state.imagenes}
-        />
+        <div className="row justify-content-center">
+          <Resultado 
+            imagenes={this.state.imagenes}
+            paginaAnterior={this.paginaAnterior}
+            paginaSiguiente={this.paginaSiguiente}
+          />
+        </div>
 
       </div>
     );
