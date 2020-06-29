@@ -7,32 +7,72 @@ class App extends Component {
 
   state = {
     termino: '',
-    imagenes: []
+    imagenes: [],
+    pagina: ''
+  }
+
+  scroll = () => {
+    const elemento = document.querySelector('.jumbotron');
+    elemento.scrollIntoView('smooth', 'start'); 
   }
 
   paginaAnterior = () => {
-    console.log('Anterior...')
+    // Leer el state de la pagina actual
+    let pagina= this.state.pagina;
+
+    // Leer si la pagina es 1, ya no ir hacia atras
+    if(pagina === 1) return null;
+
+    //Restar uno a la pagina actual
+    pagina -= 1;
+
+    //Agregar el cambio al state
+    this.setState({
+      pagina
+    }, () => {
+      this.consultarApi();
+      this.scroll();
+    });
+    
+    //console.log(pagina);
   }
 
   paginaSiguiente = () => {
-    console.log('Siguiente...')
+    // Leer el state de la pagina actual
+    let pagina= this.state.pagina;
+
+    //Sumar uno a la pagina actual
+    pagina += 1;
+
+    //Agregar el cambio al state
+    this.setState({
+      pagina
+    }, () => {
+      this.consultarApi();
+      this.scroll();
+    });
+    
+    //console.log(pagina); 
   }
 
   consultarApi = () => {
 
     const termino = this.state.termino;
-    const url = `https://pixabay.com/api/?key=17227505-5144ca8b6bc9b6f90b7a60061&q=${termino}&per_page=30`;
+    const pagina = this.state.pagina;
+    const url = `https://pixabay.com/api/?key=17227505-5144ca8b6bc9b6f90b7a60061&q=${termino}&per_page=30&page=${pagina}`;
 
-    //console.log(url);
+    console.log(url);
+    
     fetch(url)
       .then(respuesta => respuesta.json() )
-      .then(resultado => this.setState({ imagenes: resultado.hits }) ) 
+      .then(resultado => this.setState({ imagenes: resultado.hits }) )
 
   }
 
   datosBusqueda = (termino) => {
     this.setState({
-      termino
+      termino: termino,
+      pagina: 1
     }, () => {
       this.consultarApi();
     })
